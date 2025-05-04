@@ -64,7 +64,7 @@ const std::map<QString, QVariant> s_defaultSettings = {
      QVariant() /* Let processorhandler define default */},
     {RIPES_SETTING_PROCESSOR_EXTENSIONS,
      QVariant() /* Let processorhandler define default */},
-    {RIPES_SETTING_PROCESSOR_LAYOUT_ID, 0},
+    {RIPES_SETTING_PROCESSOR_LAYOUT_ID, 1},
     {RIPES_SETTING_FOLLOW_EXEC, "true"},
     {RIPES_SETTING_SOURCECODE, ""},
     {RIPES_SETTING_DARKMODE, true},
