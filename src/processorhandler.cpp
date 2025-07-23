@@ -22,7 +22,7 @@ ProcessorHandler::ProcessorHandler() {
   // Contruct the default processor
   // Processor ID
   if (RipesSettings::value(RIPES_SETTING_PROCESSOR_ID).isNull()) {
-    m_currentID = ProcessorID::RV32_5S;
+    m_currentID = ProcessorID::RV32_5MC_1M;
   } else {
     m_currentID =
         RipesSettings::value(RIPES_SETTING_PROCESSOR_ID).value<ProcessorID>();
