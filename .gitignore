@@ -3,9 +3,9 @@
 *.autosave
 *.o
 Makefile
-build*
+build*/
 .vscode
-
+compile_commands.json
 
 # Qt generated files
 moc_*
