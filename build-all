@@ -1,0 +1,54 @@
+#!/bin/bash
+SCRIPT_DIR="$(dirname "$(realpath "$0")")"
+SCRIPT_COMMAND="$0"
+set -o nounset
+set -o pipefail
+set -o errexit
+trap 'echo "$SCRIPT_COMMAND: error $? at line $LINENO"' ERR
+
+RIPES_SRC="${SCRIPT_DIR}"
+J=20
+
+build-debug()
+(
+    mkdir -p build-debug
+    cd build-debug
+    cmake "${RIPES_SRC}" -DCMAKE_BUILD_TYPE=Debug -DRIPES_BUILD_TESTS=yes
+    make -j$J
+)
+
+build-release()
+(
+    mkdir -p build-release
+    cd build-release
+    cmake "${RIPES_SRC}"
+    make -j$J
+)
+
+build-wasm()
+(
+    EMSDK_PREFIX="/home/ricardo/datos/tmp/emsdk"
+    QT_NATIVE_PREFIX="/home/ricardo/datos/tmp/qt/prefix/qtbase/"
+    QT_WASM_PREFIX="/home/ricardo/datos/tmp/qt/prefix-wasm/qtbase/"
+    . "${EMSDK_PREFIX}/emsdk_env.sh"
+    . "${QT_NATIVE_PREFIX}/prefix-env.sh"
+    . "${QT_WASM_PREFIX}/prefix-env.sh"
+    mkdir -p build-wasm
+    cd build-wasm
+    "${QT_WASM_PREFIX}/bin/qt-cmake" -DRIPES_WITH_QPROCESS=OFF -DEMSCRIPTEN=1 -DEMSCRIPTEN_FORCE_COMPILERS=ON "${RIPES_SRC}"
+    make -j$J
+)
+
+if [ $# -eq 0 ] ; then
+    if [ -e compile_commands.json ] ; then
+        build-debug
+    else
+        export RIPES_SRC J
+        export -f build-debug
+        bear -- bash -c build-debug
+    fi
+    build-release
+    #build-wasm
+else
+    "$@"
+fi
